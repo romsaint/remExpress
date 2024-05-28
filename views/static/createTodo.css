@@ -1,0 +1,55 @@
+.container{
+    padding-left: 10rem;
+    padding-right: 10rem;
+}
+
+.create-todo-form{
+    padding: 15px;
+    background-color: white;
+    border: 1px solid rgb(174, 174, 174);
+}
+
+.label-tags{
+    display: flex;
+    font-size: 13px;
+}
+
+
+
+.alert-inner{
+    display: flex;
+    justify-content: center;
+}
+.wrap__alert-line{
+    display: flex;
+    justify-content: center;
+}
+.alert-line{
+    background-color: #b85454;
+    padding: 4px;
+    margin-top: 5px;
+    width: 40%;
+}
+.alert{
+    width: 40%;
+    padding: 15px;
+    background-color: #f1abab;
+    margin-bottom: 1.5rem;
+    box-shadow: 3px 2px 4px rgba(0, 0, 0, 0.12);
+}
+.message{
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-alert{
+    position: relative;
+    left: 50%;
+    right: 50%;
+    top: -50%;
+    width: 27px;
+}
+.a__close-alert{
+    display: contents;
+    cursor: pointer;
+}
