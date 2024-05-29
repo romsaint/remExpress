@@ -106,6 +106,14 @@ app.post('/registration', async (req, res) => {
         return res.json({ lineColor: '#b85454', color: '#f1abab', message: e.message });
     }
 });
+
+app.get('/login', (req, res) => {
+    res.render('loginPage')
+})
+
+
+
+
 app.post('/verification-email', verifyToken, async (req, res) => {
     try {
         const { first, second, third, fourth } = req.body
