@@ -62,6 +62,9 @@
                 },
                 data: form.serialize(),
                 success: res => {
+                    $('.wrap__alert-line').hide()
+                    $('.alert-inner').hide()
+                    
                     $('.wrap__alert').append(`
                         <div class="wrap__alert-line">
                             <div class="alert-line" style="background-color: ${res.lineColor};"></div>

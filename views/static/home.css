@@ -172,3 +172,29 @@
 .tag-search-text{
     font-size: 19px;
 }
+
+.wrap__delete_update{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.form-delete{
+    width: 100%;
+}
+
+.delete-btn{
+    border-top: 5px solid #cd3a3a;
+    width: 20%;
+    padding: 4px;
+    background-color: #e47272;
+    color: #282828;
+    font-size: small;
+}
+.update-btn{
+    border-top: 5px solid #3a6bcd;
+    width: 20%;
+    padding: 4px;
+    background-color: #5f87d8;
+    color: #282828;
+    font-size: small;
+}

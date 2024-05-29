@@ -205,6 +205,20 @@ app.get('/complete/:postId', verifyToken, async (req, res) => {
 app.get('/profile', (req, res) => {
     res.render('profile')
 })
+
+
+app.post('/delete/:postId', async (req, res) => {
+    const postId = req.params.postId
+    
+
+    if(postId){
+        await ToDo.deleteOne({_id: postId})
+
+        return res.json({ lineColor: '#54b854', color: '#baf1ab', message: "Successfully deleted!" });
+    }
+
+    return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Something error" });
+})
 //       OTHER
 
 //    MAIL
