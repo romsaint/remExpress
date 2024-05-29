@@ -109,13 +109,10 @@
                                     <div class="date">
                                         <li class="text-date">${new Date(res.todoData[i].date_created).toLocaleDateString()}</li>
                                     </div>
-                                    <div class="wrap__delete_update">
-
+                                    <div class="wrap__delete">
                                         <form class="form-delete form-delete${res.todoData[i]._id}" action="/delete/${res.todoData[i]._id}" method="post">
                                             <button type="submit" class="delete-btn">Delete</button>
                                         </form>
-                                        
-                                        <button class="update-btn">Update</button>
                                     </div>
                                 </div>
                             </div>`)

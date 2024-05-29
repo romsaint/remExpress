@@ -173,13 +173,12 @@
     font-size: 19px;
 }
 
-.wrap__delete_update{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-}
+
 .form-delete{
     width: 100%;
+    display: flex;
+    justify-content: end;
+    margin-top: 15px;
 }
 
 .delete-btn{
