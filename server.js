@@ -189,7 +189,7 @@ app.get('/tag-search-data/:tag', verifyToken, async (req, res) => {
 })
 
 
-app.get('/complete/:postId', verifyToken, async (req, res) => {
+app.post('/complete/:postId', verifyToken, async (req, res) => {
     const postId = req.params.postId
     if(postId){
         await ToDo.updateOne({_id: postId}, {isConfirm: true})
@@ -207,7 +207,7 @@ app.get('/profile', (req, res) => {
 })
 
 
-app.post('/delete/:postId', async (req, res) => {
+app.delete('/delete/:postId', verifyToken, async (req, res) => {
     const postId = req.params.postId
     
 
