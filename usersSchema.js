@@ -11,10 +11,11 @@ const schema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     codeForAuth: {
-        type: Number,
+        type: String,
         required: true
     },
     isVerificated: {

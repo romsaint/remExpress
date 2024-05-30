@@ -55,6 +55,34 @@
 
 
     <script>
+       /* 
+        $.ajax({
+            url: '/is-verificated',
+            method: "get",
+            success: res => {
+
+                if(res.message === false){
+                    $('.inputs').remove()
+                    $('.button-register').remove()
+                    $('.wrap__for-mail-verifications').append(`
+                        <div class="code-verifications">
+                            <form action="/verification-email" method="post" class="form-verificate-email">
+                                <div class="inputs__verifications-code" style="display: flex; justify-content: center; gap: 10px;">
+                                    <input type="text" style="padding: 12px; width: 40px; border: 1px solid gray; box-shadow: 1.5px 1px 0px rgb(172, 172, 172); outline: none;" name="first" maxlength="1" required>
+                                    <input type="text" style="padding: 12px; width: 40px; border: 1px solid gray; box-shadow: 1.5px 1px 0px rgb(172, 172, 172); outline: none;" name="second" maxlength="1" required>
+                                    <input type="text" style="padding: 12px; width: 40px; border: 1px solid gray; box-shadow: 1.5px 1px 0px rgb(172, 172, 172); outline: none;" name="third" maxlength="1" required>
+                                    <input type="text" style="padding: 12px; width: 40px; border: 1px solid gray; box-shadow: 1.5px 1px 0px rgb(172, 172, 172); outline: none;" name="fourth" maxlength="1" required>
+                                </div>
+                                <button type="submit" class="btn-verificate group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Verificate
+                                </button>
+                            </form>
+                        </div>
+                `)
+                }
+            }
+        })
+*/
         $('.registration-form').submit((e) => {
             e.preventDefault()
             let form = $('.registration-form')

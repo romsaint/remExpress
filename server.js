@@ -58,14 +58,15 @@ app.post('/registration', async (req, res) => {
         const { username, password, mail } = req.body;
 
         if (!username || !password || !mail) {
-            return res.json({ message: 'Provide the data.', color: '' });
+            return res.json({ message: 'Provide the data.', color: '#f1abab' });
         }
 
-        const isUserExists = await Users.findOne({ username }, { '_id': 1 }).lean().exec()
+        const isUserExists = await Users.findOne({ email: mail }, { '_id': 1 }).lean().exec()
 
         if (isUserExists) {
-            return res.json({ lineColor: '#b85454', color: '#f1abab', message: "User already exists." });
+            return res.json({ lineColor: '#b85454', color: '#f1abab', message: `User with email - ${mail} already exists.` });
         }
+        let randomMail = randomForMail()
 
         const nodemailerOptions = {
             from: {
@@ -74,8 +75,8 @@ app.post('/registration', async (req, res) => {
             },
             to: mail,
             subject: 'Authentication code',
-            text: `${randomCode}`,
-            html: `<h1>${randomCode}</h1>`
+            text: `${randomMail}`,
+            html: `<h1>${randomMail}</h1>`
         };
 
         transporter.sendMail(nodemailerOptions, (err, info) => {
@@ -86,7 +87,7 @@ app.post('/registration', async (req, res) => {
         });
 
         const hashedPassword = await bcrypt.hash(password, 10)
-        const codeForAuth = await bcrypt.hash(randomForMail(), 10)
+        const codeForAuth = await bcrypt.hash(`${randomMail}`, 10)
 
         const user = await Users.create({
             username,
@@ -103,14 +104,51 @@ app.post('/registration', async (req, res) => {
         res.json({ token })
 
     } catch (e) {
+        console.log(e)
         return res.json({ lineColor: '#b85454', color: '#f1abab', message: e.message });
     }
 });
+
+// app.get('/is-verificated', verifyToken, async (req, res) => {
+//     const user = await Users.findOne({unique_id: req.user})
+
+//     if(user){
+//         return res.json({ message: user.isVerificated })
+//     }
+
+//     return 'N'
+// })
 
 app.get('/login', (req, res) => {
     res.render('loginPage')
 })
 
+
+app.post('/login', async (req, res) => {
+    try {
+        const { password, email } = req.body
+
+        const findUser = await Users.findOne({ email })
+
+        if (findUser) {
+            const hashPassword = findUser.password
+
+            const isPasswordMatch = await bcrypt.compare(password, hashPassword)
+            if (isPasswordMatch) {
+                const token = jwt.sign(findUser.unique_id, process.env.SECRET_JWT_KEY)
+
+                return res.json({ lineColor: '#54b854', color: '#baf1ab', message: "Successfully logining!", token});
+            }
+
+            return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Password didn't match!" });
+        }
+
+        return res.json({ lineColor: '#b85454', color: '#f1abab', message: "User does not exists!" });
+
+    } catch (e) {
+        return res.json({ lineColor: '#b85454', color: '#f1abab', message: e.message });
+    }
+})
 
 
 
@@ -122,7 +160,7 @@ app.post('/verification-email', verifyToken, async (req, res) => {
 
         const user = await Users.findOne({ unique_id: req.user })
 
-        if (!(await bcrypt.compare(parseInt(strCode), user.codeForAuth))) {
+        if (!(await bcrypt.compare(strCode, user.codeForAuth))) {
             return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Code didn't match!" });
         }
 
@@ -246,7 +284,7 @@ let transporter = nodemailer.createTransport({
 });
 
 function randomForMail() {
-    return Math.floor(1000 + Math.random() * 9000);
+    return Math.floor((Math.random() + 1000) * (Math.random() + 1))
 }
 //  END MAIl
 
@@ -269,12 +307,13 @@ async function verifyToken(req, res, next) {
 }
 
 function randomLetter() {
-    const s = '1234567890qwertyuiopasdfghjklzxcvbnm';
+    const s = '1234567890QWERTYUIOPASDFGHJKLZXCVBNM';
     const randomIndex = Math.floor(Math.random() * s.length);
     return s[randomIndex];
 }
 
 const globalUniqueIdStorage = []
+
 function randomId() {
     let res = '';
     for (let i = 0; i < 6; i++) {
