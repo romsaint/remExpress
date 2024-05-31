@@ -10,7 +10,6 @@ const Cache = require('node-cache')
 const app = express()
 const path = require('path')
 
-const cache = new Cache()
 
 async function connectMongoose() {
     await mongoose.connect('mongodb://localhost/remExpress')
@@ -30,7 +29,7 @@ app.get('/', (req, res) => {
 })
 app.get('/homeData/:page', verifyToken, async (req, res) => {
     try {
-        const user = await Users.findOne({ unique_id: req.user }, { '_id': 1 })
+        const user = await Users.findOne({ unique_id: req.user }, { '_id': 1 }).lean().exec()
 
         const count = await ToDo.countDocuments({ user_id: user._id, isConfirm: false })
         const page = parseInt(req.params.page)
@@ -38,11 +37,11 @@ app.get('/homeData/:page', verifyToken, async (req, res) => {
         if (page >= 0 && page <= Math.floor(count / 2)) {
             const todoData = await ToDo.find({ user_id: user._id, isConfirm: false }).skip(page * 2).limit(2).lean().exec()
 
-            res.json({ todoData, count })
+            res.json({ todoData, count, page })
         } else {
             const todoData = await ToDo.find({ user_id: user._id, isConfirm: false }).limit(2).lean().exec()
 
-            res.json({ todoData, count })
+            res.json({ todoData, count, page })
         }
     } catch (e) {
         return res.json({ lineColor: '#b85454', color: '#f1abab', message: e.message });
@@ -109,26 +108,19 @@ app.post('/registration', async (req, res) => {
     }
 });
 
-// app.get('/is-verificated', verifyToken, async (req, res) => {
-//     const user = await Users.findOne({unique_id: req.user})
 
-//     if(user){
-//         return res.json({ message: user.isVerificated })
-//     }
-
-//     return 'N'
-// })
 
 app.get('/login', (req, res) => {
     res.render('loginPage')
 })
 
-// NEW NEW NEWN EWN EWN WENEW N WNE NWEN WNWNWN NW 
+
+
 app.post('/login', async (req, res) => {
     try {
         const { password, email } = req.body
 
-        const findUser = await Users.findOne({ email })
+        const findUser = await Users.findOne({ email }).lean().exec()
 
         if (findUser) {
             const hashPassword = findUser.password
@@ -158,7 +150,7 @@ app.post('/verification-email', verifyToken, async (req, res) => {
 
         let strCode = first + second + third + fourth
 
-        const user = await Users.findOne({ unique_id: req.user })
+        const user = await Users.findOne({ unique_id: req.user }).exec()
 
         if (!(await bcrypt.compare(strCode, user.codeForAuth))) {
             return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Code didn't match!" });

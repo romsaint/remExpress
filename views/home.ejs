@@ -75,9 +75,10 @@
                     }else{
                         $('.number-of-pages').attr('id', res.count)
                         $('.sector__main').remove(); // Remove existing items
-    
+
+                        console.log(res)
                         for (let i = 0; i < res.todoData.length; i++) {
-    
+
                             $('.main').append(`
                             <div class="sector__main">
                                 <div class="inner-sector__main">
@@ -86,7 +87,7 @@
                                             <h1 class="text-title">${res.todoData[i].title}</h1>
                                         </center>
                                         <div class="count-todo">
-                                            <h1 class="h1__count-todo">${i + 1}</h1>
+                                            <h1 class="h1__count-todo">${(i + 1) % 2 !== 0 ? res.page + 1 === 1 ? 1 : (res.page + 1) * 2 - 1 : res.page + 1 === 1 ? 2 : (res.page + 1) * 2 }</h1>
                                         </div>
                                     </div>
                                     <div class="description description-${i + 1}">
