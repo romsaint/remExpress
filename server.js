@@ -123,7 +123,7 @@ app.get('/login', (req, res) => {
     res.render('loginPage')
 })
 
-
+// NEW NEW NEWN EWN EWN WENEW N WNE NWEN WNWNWN NW 
 app.post('/login', async (req, res) => {
     try {
         const { password, email } = req.body
