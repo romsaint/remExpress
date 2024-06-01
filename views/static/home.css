@@ -188,7 +188,7 @@
 }
 
 
-.form-delete, .form-favourites{
+.form-delete, .form-favourites, .form-del-favourites{
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -216,11 +216,23 @@
     color: #282828;
     font-size: small;
 }
+.del-favourites-btn{
+    border-top: 5px solid #cd6b3a;
+    width: 50%;
+    padding: 4px;
+    background-color: #cd835f;
+    color: #282828;
+    font-size: small;
+}
+
+.fav{
+    width: 100%;
+}
 
 .wrap__favourites{
     display: flex;
     align-items: center;
 }
 .svg-favourites{
-    width: 35px;
+    width: 30px;
 }
