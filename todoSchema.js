@@ -27,7 +27,13 @@ const schema = new mongoose.Schema({
     isConfirm: {
         type: Boolean,
         required: true
+    },
+    isFavourites: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 })
+
 
 module.exports = mongoose.model('todos', schema)

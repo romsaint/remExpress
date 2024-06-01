@@ -34,15 +34,10 @@ app.get('/homeData/:page', verifyToken, async (req, res) => {
         const count = await ToDo.countDocuments({ user_id: user._id, isConfirm: false })
         const page = parseInt(req.params.page)
 
-        if (page >= 0 && page <= Math.floor(count / 2)) {
-            const todoData = await ToDo.find({ user_id: user._id, isConfirm: false }).skip(page * 2).limit(2).lean().exec()
+        const todoData = await ToDo.find({ user_id: user._id, isConfirm: false }).skip(page * 2).limit(2).lean().exec()
 
-            res.json({ todoData, count, page })
-        } else {
-            const todoData = await ToDo.find({ user_id: user._id, isConfirm: false }).limit(2).lean().exec()
-
-            res.json({ todoData, count, page })
-        }
+        res.json({ todoData, count, page })
+        
     } catch (e) {
         return res.json({ lineColor: '#b85454', color: '#f1abab', message: e.message });
     }
@@ -239,10 +234,17 @@ app.post('/complete/:postId', verifyToken, async (req, res) => {
 })
 
 
+app.post('/favourites/:postId', verifyToken, async (req, res) => {
+    const postId = req.params.postId
+    if (postId) {
+        await ToDo.updateOne({ _id: postId }, { isFavourites: true })
 
-app.get('/profile', (req, res) => {
-    res.render('profile')
+        return res.json({ lineColor: '#54b854', color: '#baf1ab', message: "The post has been added to favourites!" });
+    }
+
+    return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Something error" });
 })
+
 
 
 app.delete('/delete/:postId', verifyToken, async (req, res) => {
