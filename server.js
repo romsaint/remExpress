@@ -256,7 +256,7 @@ app.post('/del-from-favourites/:postId', verifyToken, async (req, res) => {
     if (postId) {
         await ToDo.updateOne({ _id: postId }, { isFavourites: false })
 
-        return res.json({ lineColor: '#54b854', color: '#baf1ab', message: "The post has been deleted from favourites!" });
+        return res.json({ lineColor: '#dc9956', color: '#fec58c', message: "The post has been deleted from favourites!" });
     }
 
     return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Something error" });
