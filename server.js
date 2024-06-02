@@ -207,8 +207,10 @@ app.get('/tag-search-data/:tag', verifyToken, async (req, res) => {
 
         const user = await Users.findOne({ unique_id: req.user }, { '_id': 1 }).lean().exec()
 
+        const count = await ToDo.countDocuments({ user_id: user._id, isConfirm: false })
+        const page = parseInt(req.params.page)
+
         const todos = await ToDo.find({ isConfirm: false, user_id: user._id }).lean().exec()
-        const count = await ToDo.countDocuments()
 
         let listId = []
 
@@ -220,7 +222,7 @@ app.get('/tag-search-data/:tag', verifyToken, async (req, res) => {
             }
         }
 
-        res.json({ listId, count })
+        res.json({ listId, count, page })
     } catch (e) {
         console.log(e.message)
         return res.json({ lineColor: '#54b854', color: '#baf1ab', message: "Successfully create!" });
@@ -235,7 +237,7 @@ app.post('/complete/:postId', verifyToken, async (req, res) => {
         await ToDo.updateOne({ _id: postId }, { isConfirm: true })
 
         return res.json({ lineColor: '#54b854', color: '#baf1ab', message: "Successfully updated!" });
-    }
+    }f
 
     return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Something error" });
 })

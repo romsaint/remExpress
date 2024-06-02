@@ -179,7 +179,7 @@
 .wrap__tag-search-text{
     margin-bottom: 25px;
     padding: 10px;
-    box-shadow: 2px 2px 0px rgb(172, 172, 172);
+    box-shadow: 3px 2px 0px rgba(1, 1, 1, 0.1);
     background-color: #afd3e3;
     width: 50%;
 }

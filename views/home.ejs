@@ -153,6 +153,7 @@
                         }
 
                         //   END CYCLE        ///
+                        $('.wrap__tag-search-text').hide()
                         $(`.form-delete`).submit(e => {
                             e.preventDefault()     
                             const form = $(e.currentTarget)
@@ -282,8 +283,13 @@
                                                     <center>
                                                         <h1 class="text-title">${res.listId[i].title}</h1>
                                                     </center>
+                                                    
+                                                    <div class="wrap__favourites">
+                                                        ${res.listId[i].isFavourites === true ? '<svg class="svg-favourites" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 404.204 404.204" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path style="fill:#ffbd80;" d="M316.953,395.112c-3.35,0-6.706-1.033-9.567-3.106l-105.279-76.5L96.829,392.001 c-5.706,4.15-13.429,4.15-19.14,0c-5.706-4.145-8.088-11.487-5.912-18.199l40.211-123.771L6.709,173.546 c-5.706-4.15-8.088-11.493-5.912-18.199s8.425-11.243,15.48-11.243h130.135l40.211-123.771c2.176-6.706,8.431-11.243,15.48-11.243 c7.049,0,13.304,4.536,15.48,11.243l40.211,123.771h130.135c7.054,0,13.304,4.536,15.48,11.243s-0.207,14.049-5.912,18.199 l-105.268,76.49l40.211,123.771c2.176,6.706-0.207,14.049-5.912,18.199C323.676,394.078,320.314,395.112,316.953,395.112z M202.107,279.118c3.356,0,6.717,1.033,9.567,3.106l74.33,53.999l-28.397-87.373c-2.176-6.706,0.207-14.049,5.912-18.199 l74.33-53.999h-91.877c-7.044,0-13.293-4.536-15.48-11.243l-28.386-87.384l-28.386,87.384c-2.187,6.706-8.441,11.243-15.48,11.243 H66.364l74.33,53.999c5.706,4.15,8.088,11.493,5.912,18.199l-28.392,87.373l74.33-53.999 C195.39,280.152,198.757,279.118,202.107,279.118z"></path> </g> </g> </g></svg>' : ''}
+                                                    </div>
+            
                                                     <div class="count-todo">
-                                                        <h1 class="h1__count-todo">${i + 1}</h1>
+                                                        <h1 class="h1__count-todo">${(i + 1) % 2 !== 0 ? (res.page + 1) * 2 - 1 : (res.page + 1) * 2 }</h1>
                                                     </div>
                                                 </div>
                                                 <div class="description description-${i + 1}">
@@ -292,7 +298,7 @@
                                                     </p>
                                                 </div>
                 
-                                                <form action="/complete/${res.listId[i]._id}" method="get" class="form-complete">
+                                                <form action="/complete/${res.listId[i]._id}" method="post" class="form-complete form-complete-${res.listId[i]._id}">
                                                     <div class="is-confirm is-confirm-${i + 1}">
                                                         <button type="submit" class="button__is-confirm button__is-confirm-${i + 1}">Not completed</button>
                                                     </div>    
@@ -300,10 +306,23 @@
                 
                                                 <div class="tags">
                                                     <ul class="inner-tags inner-tags-${i + 1}">
+            
                                                     </ul>
                                                 </div>
                                                 <div class="date">
                                                     <li class="text-date">${new Date(res.listId[i].date_created).toLocaleDateString()}</li>
+                                                </div>
+                                                <div class="wrap__delete">
+                                                    <form class="form-delete" action="/delete/${res.listId[i]._id}" method="post">
+                                                        <button type="submit" class="delete-btn">Delete</button>
+                                                    </form>
+            
+                                                    <div class="fav fav-${i + 1}">
+                                                        <form class="form-favourites" action="/favourites/${res.listId[i]._id}" method="post">
+                                                            <button type="submit" class="favourites-btn">To favourites</button>
+                                                        </form>
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>`)
@@ -317,6 +336,14 @@
                                             `);
                                         }
                                         //
+                                        if(res.listId[i].isFavourites === true){
+                                            $(`.fav-${i + 1} > *`).remove()
+                                            $(`.fav-${i + 1}`).append(`
+                                                <form class="form-del-favourites" action="/del-from-favourites/${res.listId[i]._id}" method="post">
+                                                    <button type="submit" class="del-favourites-btn">Del favourites</button>
+                                                </form>
+                                            `)
+                                        }
                                         $('.button__is-confirm').hover((e) => {
                                             if (e.type === 'mouseenter') {
                                                 $(e.target).text('Complete');
@@ -337,6 +364,88 @@
                                             $(`.is-confirm-${j}`).css({ 'margin-top': `${finallResH}px` });
                                         }
                                     }
+
+                                                    
+                                        $('.form-complete').submit(e => {
+                                            e.preventDefault()
+                                            handleFormSubmit($(e.currentTarget))
+                                        })
+                                        
+                                        $('.form-favourites').submit(e => {
+                                            e.preventDefault()
+                                            handleFormSubmit($(e.currentTarget))
+                                        })
+                                        
+                                        $('.form-del-favourites').submit(e => {
+                                            e.preventDefault()
+                                            handleFormSubmit($(e.currentTarget))
+                                        })
+
+                                        $('.link-next').click(e => {
+                                            e.preventDefault();
+                                            currentPage++;
+                                
+                                            let countPages = $('.number-of-pages').attr('id')
+                                            if(currentPage > Math.round(parseInt(countPages) / 2) - 1){
+                                                currentPage = currentPage -1
+                                            }
+                                
+                                            loadTodoItems(currentPage);
+                                        });
+                                
+                                        $('.link-prev').click(e => {
+                                            e.preventDefault();
+                                            if (currentPage > 0) {
+                                                currentPage--;
+                                                
+                                                if(currentPage < 0){
+                                                    currentPage = 0
+                                                }
+                                                loadTodoItems(currentPage);
+                                            }
+                                        });
+
+                                        $(`.form-delete`).submit(e => {
+                                            e.preventDefault()     
+                                            const form = $(e.currentTarget)
+                
+                                            $.ajax({
+                                                url: form.attr('action'),
+                                                method: 'DELETE',
+                                                headers: {
+                                                    'Authorization': `Bearer ${localStorage.token}`
+                                                },
+                                                success: res => {
+                                                    $('.wrap__alert-line').hide()
+                                                    $('.alert-inner').hide()
+                                                    
+                                                    $('.alert-wrap').append(`
+                                                        <div class="wrap__alert-line">
+                                                            <div class="alert-line" style="background-color: ${res.lineColor};"></div>
+                                                        </div>
+                                                        <div class="alert-inner">
+                                                            <div class="alert" style="background-color: ${res.color};">
+                                                                <div class="message">
+                                                                    <p>${res.message}</p>
+                                                                    <div class="wrap__close-alert">
+                                                                        <a class="a__close-alert">
+                                                                            <svg viewBox="0 0 24 24" class="close-alert" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.4" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#ffffff"></path> <path d="M13.0594 12.0001L15.3594 9.70011C15.6494 9.41011 15.6494 8.93011 15.3594 8.64011C15.0694 8.35011 14.5894 8.35011 14.2994 8.64011L11.9994 10.9401L9.69937 8.64011C9.40937 8.35011 8.92937 8.35011 8.63938 8.64011C8.34938 8.93011 8.34938 9.41011 8.63938 9.70011L10.9394 12.0001L8.63938 14.3001C8.34938 14.5901 8.34938 15.0701 8.63938 15.3601C8.78938 15.5101 8.97937 15.5801 9.16937 15.5801C9.35937 15.5801 9.54937 15.5101 9.69937 15.3601L11.9994 13.0601L14.2994 15.3601C14.4494 15.5101 14.6394 15.5801 14.8294 15.5801C15.0194 15.5801 15.2094 15.5101 15.3594 15.3601C15.6494 15.0701 15.6494 14.5901 15.3594 14.3001L13.0594 12.0001Z" fill="#ffffff"></path> </g></svg>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    `)
+                                
+                                                    $('.a__close-alert').on('click', (e) => {
+                                                        $('.wrap__alert-line').hide()
+                                                        $('.alert-inner').hide()
+                                                    })
+                                
+                                                    loadTodoItems(currentPage);
+                                                }
+                                            })
+                                        })
                                 }
                             });
                         });
