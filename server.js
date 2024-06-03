@@ -313,7 +313,7 @@ async function verifyToken(req, res, next) {
     }
     token = token.split(' ')[1]
     jwt.verify(token, process.env.SECRET_JWT_KEY, (err, decoded) => {
-        if (err) return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Server error.3" });
+        if (err) return res.json({ lineColor: '#b85454', color: '#f1abab', message: "Please, authenticate" });
         req.user = decoded
         next()
     })

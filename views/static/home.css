@@ -225,6 +225,10 @@
     font-size: small;
 }
 
+.wrap__footer{
+    margin-top: 50px;
+}
+
 .fav{
     width: 100%;
 }
